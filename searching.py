@@ -19,12 +19,20 @@ def read_data(file_name, field):
     """
     # get current working directory path
     cwd_path = Path.cwd()
-    
+
     file_path = cwd_path / file_name
+
+    if field not in ("dna_sequence", "ordered_numbers", "dna_sequence"):
+        return None
+    else:
+        with open(file_path, "r") as file:
+            data = json.load(file)
+        return data[field]
 
 
 def main():
-    pass
+    sequential_data = read_data("sequential.json", "unordered_numbers")
+    print(sequential_data)
 
 
 if __name__ == "__main__":
