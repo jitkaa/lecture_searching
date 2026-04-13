@@ -1,5 +1,8 @@
 from pathlib import Path
 import json
+import time
+import matplotlib.pyplot as plt
+from generators import unordered_sequence, ordered_sequence
 
 
 def read_data(file_name, field):
@@ -67,15 +70,37 @@ def binary_search(seznam, cislo):
 
 
 def main():
-    sequential_data = read_data("sequential.json", "unordered_numbers")
-    ordered_numbers =  read_data("sequential.json", "ordered_numbers")
-    print(sequential_data)
+    sizes = [100, 500, 1000, 5000, 10000]
+    linear_times = []
+    binary_times = []
+    numbers = [4, 8, 15, 16, 23, 42, 55, 78, 91, 120]
+    target = 78
+
+    for size in sizes:
+        test = unordered_sequence(size)
+        ordered = ordered_sequence(size)
+
+        start = time.perf_counter()
+        search = linear_search(test, target)
+        linear_times.append(time.perf_counter()-start)
+
+        start2 = time.perf_counter()
+        search2 = binary_search(ordered, target)
+        print(search2)
+        binary_times.append(time.perf_counter()-start2)
+
+    print(linear_times)
+    print(binary_times)
 
 
-    search_results = linear_search(sequential_data, 0)
-    search_bin = binary_search(ordered_numbers, -12)
-    print(search_results)
-    print(search_bin)
+    plt.plot(sizes, linear_times)
+    plt.plot(sizes, binary_times)
+
+    plt.xlabel("Velikost vstupu")
+    plt.ylabel("Čas [s]")
+    plt.title("Ukázkový graf měření")
+    plt.show()
+    #občas něco vykreslí a občas ne, ale grafy odpovídají.
 
 #nejlepší - veprostřed 1 operace O(1)
 #nejhorší - n/2**k, k = log2(n) - Olog(n)
