@@ -22,18 +22,36 @@ def read_data(file_name, field):
 
     file_path = cwd_path / file_name
 
-    if field not in ("dna_sequence", "ordered_numbers", "dna_sequence"):
+    if field not in ("dna_sequence", "ordered_numbers", "unordered_numbers"):
         return None
     else:
         with open(file_path, "r") as file:
             data = json.load(file)
         return data[field]
 
+def linear_search(sequence, number):
+    count = 0
+    position = 0
+    vyskyty = []
+    for prvek in sequence:
+        if prvek == number:
+            count +=1
+            vyskyty.append(position)
+        position +=1
+    result = {
+        "positions" : vyskyty,
+        "count" : count
+    }
+    return result
+
 
 def main():
     sequential_data = read_data("sequential.json", "unordered_numbers")
     print(sequential_data)
 
+
+    search_results = linear_search(sequential_data, 0)
+    print(search_results)
 
 if __name__ == "__main__":
     main()
